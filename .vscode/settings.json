@@ -1,4 +1,4 @@
 {
-    "appService.defaultWebAppToDeploy": "/subscriptions/a1460e96-e091-46e5-8a54-5b7a9ccfff63/appservices/subscriptions/a1460e96-e091-46e5-8a54-5b7a9ccfff63/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/lsa-api-azure-deploy",
+    "appService.defaultWebAppToDeploy": "/subscriptions/a1460e96-e091-46e5-8a54-5b7a9ccfff63/appservices/subscriptions/a1460e96-e091-46e5-8a54-5b7a9ccfff63/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/lsa-web-api",
     "appService.deploySubpath": "."
 }

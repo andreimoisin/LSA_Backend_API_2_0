@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
+const verify = require('./verifyToken');
 const bcrypt = require('bcryptjs');
-const { registerValidation, loginValidation } = require('../validation');
+const { registerValidation, loginValidation, resetPassValidation } = require('../validation');
 
 
 
@@ -26,11 +27,14 @@ router.post('/register', async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: hashPassword
+        password: hashPassword,
+        account_type: req.body.account_type,
+        birth: req.body.birth,
+        gender: req.body.gender
     });
     try {
         const savedUser = await user.save();
-        res.send({user: user._id});
+        res.send({ user: user._id });
     } catch (err) {
         res.status(400).send(err);
     }
@@ -51,15 +55,51 @@ router.post('/login', async (req, res) => {
 
     //Pass verify
     const validPass = await bcrypt.compare(req.body.password, user.password);
-    if(!validPass) return res.status(400).send('Password is incorrect!');
-    
+    if (!validPass) return res.status(400).send('Password is incorrect!');
+
     //Create auth token
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
     res.header('auth-token', token).send(token);
 
 
     //res.send('Logged in!');
-    
+
+});
+
+//RESET PASSWORD
+router.patch('/reset-password', verify, async (req, res) => {
+    const user = await User.findOne({ _id: req.user._id });
+    if (!user) {
+        return res.status(404).send("User not found");
+    }
+
+    // Validate input
+    const { error } = resetPassValidation(req.body);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    // Check if old password is correct
+    const validPass = await bcrypt.compare(req.body.oldPassword, user.password);
+    if (!validPass) {
+        return res.status(400).send("Incorrect old password");
+    }
+
+    // Verify that password and repassword match
+    if (req.body.password !== req.body.repassword) {
+        return res.status(400).send("Password and confirmed password don't match");
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+    // Update password
+    user.password = hashPassword;
+    await user.save();
+
+    res.send("Password reset successful");
+
 });
 
 module.exports = router;

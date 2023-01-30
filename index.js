@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 
 //Import Routes
 const authRoute = require('./routes/auth');
+const usersDataRoute = require('./routes/usersData');
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cors());
 
 //Routes Middlewares
 app.use('/api/user', authRoute);
+app.use('/api/user', usersDataRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello world');

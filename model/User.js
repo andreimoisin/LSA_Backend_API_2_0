@@ -19,10 +19,22 @@ const userSchema = new mongoose.Schema({
         max: 1024,
         min: 6
     },
+    account_type: {
+        type: String,
+        default: "STUDENT"
+    },
+    birth: {
+        type: Number,
+        default: 2020
+    },
+    gender: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now,
-    },
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);
