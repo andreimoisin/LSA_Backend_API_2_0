@@ -24,8 +24,8 @@ mongoose.connect(
 
 //Connect to Treblle
 useTreblle(app, {
-    apiKey: "_TREBLLE_API_KEY_",
-    projectId: "_TREBLLE_PROJECT_ID_",
+    apiKey: process.env._TREBLLE_API_KEY_,
+    projectId: process.env._TREBLLE_PROJECT_ID_,
   });
 
 
