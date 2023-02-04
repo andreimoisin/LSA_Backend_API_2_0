@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const express = require("express");
+const { useTreblle } = require("treblle");
 
 
 //Import Routes
@@ -11,6 +13,9 @@ const usersDataRoute = require('./routes/usersData');
 
 dotenv.config();
 
+//Middleware
+app.use(express.json());
+
 //Connect to DB
 mongoose.connect(
     process.env.DB_CONNECT, 
@@ -18,8 +23,12 @@ mongoose.connect(
     () => console.log('connected to db!')
 );
 
-//Middleware
-app.use(express.json());
+//Connect to Treblle
+useTreblle(app, {
+    apiKey: "_TREBLLE_API_KEY_",
+    projectId: "_TREBLLE_PROJECT_ID_",
+  });
+
 
 //Adding cors
 app.use(express.urlencoded({extended:true}));
