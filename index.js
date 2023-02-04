@@ -3,7 +3,6 @@ const cors = require('cors');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const express = require("express");
 const { useTreblle } = require("treblle");
 
 
