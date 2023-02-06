@@ -26,6 +26,7 @@ mongoose.connect(
 useTreblle(app, {
     apiKey: process.env._TREBLLE_API_KEY_,
     projectId: process.env._TREBLLE_PROJECT_ID_,
+    additionalFieldsToMask: ['repassword', 'oldPassword'],
   });
 
 
