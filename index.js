@@ -9,6 +9,7 @@ const { useTreblle } = require("treblle");
 //Import Routes
 const authRoute = require('./routes/auth');
 const usersDataRoute = require('./routes/usersData');
+const imagesCollectionRoute = require('./routes/imagesCollection');
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(cors());
 //Routes Middlewares
 app.use('/api/user', authRoute);
 app.use('/api/user', usersDataRoute);
+app.use('/api/images', imagesCollectionRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello world');
