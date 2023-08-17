@@ -10,6 +10,8 @@ const { useTreblle } = require("treblle");
 const authRoute = require('./routes/auth');
 const usersDataRoute = require('./routes/usersData');
 const imagesCollectionRoute = require('./routes/imagesCollection');
+const adminRoute = require('./routes/adminActions');
+const userStatsDataRoute = require('./routes/userStatsData');
 
 dotenv.config();
 
@@ -39,12 +41,12 @@ app.use(cors());
 app.use('/api/user', authRoute);
 app.use('/api/user', usersDataRoute);
 app.use('/api/images', imagesCollectionRoute);
+app.use('/api/admin', adminRoute);
+app.use('/api/user/stats', userStatsDataRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello world');
 })
-
-
 
 
 app.listen(3000, () => console.log('Server Up and running'))

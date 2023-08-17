@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../model/User');
+const UserStats = require('../model/UserStats');
 const jwt = require('jsonwebtoken');
 const verify = require('./verifyToken');
 const bcrypt = require('bcryptjs');
@@ -32,12 +33,27 @@ router.post('/register', async (req, res) => {
         birth: req.body.birth,
         gender: req.body.gender
     });
+    // try {
+    //     const savedUser = await user.save();
+    //     res.send({ user: user._id });
+    // } catch (err) {
+    //     res.status(400).send(err);
+    // }
+    
     try {
         const savedUser = await user.save();
-        res.send({ user: user._id });
-    } catch (err) {
+    
+        // Create UserStats with default values
+        const userStats = new UserStats({
+          user: savedUser._id
+        });
+        const savedUserStats = await userStats.save();
+    
+        res.send({ user: savedUser._id, userStats: savedUserStats._id });
+      } catch (err) {
         res.status(400).send(err);
-    }
+      }
+
 });
 
 //LOGIN
@@ -58,7 +74,9 @@ router.post('/login', async (req, res) => {
     if (!validPass) return res.status(401).send('Password is incorrect!');
 
     //Create auth token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+    //const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+    const token = jwt.sign({ _id: user._id, account_type: user.account_type }, process.env.TOKEN_SECRET);
+
     res.header('auth-token', token).send(token);
 
 
